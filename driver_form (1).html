@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل السائقين</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        img.logo {
+            width: 120px;
+            display: block;
+            margin: 0 auto 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        button {
+            width: 48%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #005bbb;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button.secondary {
+            background: #777;
+        }
+        .hidden { display: none; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input, select, textarea {
+            width: 100%;
+            margin-top: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        textarea { height: 80px; }
+        .success {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <img src="https://i.imgur.com/0w3hYqh.png" class="logo" alt="Company Logo" />
+
+    <div id="welcome">
+        <h2>مرحبًا بك، هل أنت سائق جديد؟</h2>
+        <div style="display:flex; justify-content:space-between;">
+            <button onclick="startForm()">نعم</button>
+            <button class="secondary" onclick="exitProcess()">لا</button>
+        </div>
+    </div>
+
+    <form id="driverForm" class="hidden" onsubmit="submitForm(event)">
+        <h2>نموذج تسجيل السائق</h2>
+
+        <label>الاسم الرباعي:</label>
+        <input type="text" id="fullName" required pattern="[A-Za-zأ-ي\s]{4,}" />
+
+        <label>السجل المدني:</label>
+        <input type="text" id="nationalId" required pattern="\d{10}" />
+
+        <label>رقم الجوال:</label>
+        <input type="text" id="phone" required pattern="\d{10}" />
+
+        <label>نوع الرخصة:</label>
+        <select id="licenseType" required>
+            <option value="">اختر نوع الرخصة</option>
+            <option>خفيف</option>
+            <option>ثقيل</option>
+            <option>حافلة كبيرة</option>
+        </select>
+
+        <label>هل الرخصة سارية؟</label>
+        <select id="licenseValid" required>
+            <option value="">اختر</option>
+            <option>نعم</option>
+            <option>لا</option>
+        </select>
+
+        <label>هل عملت من قبل في شركة حافل؟</label>
+        <select id="workedBefore" required>
+            <option value="">اختر</option>
+            <option>نعم</option>
+            <option>لا</option>
+        </select>
+
+        <label>المنطقة:</label>
+        <input type="text" id="region" required />
+
+        <label>المنطقة التي يسكن فيها:</label>
+        <input type="text" id="livingArea" required />
+
+        <label>ملاحظات:</label>
+        <textarea id="notes"></textarea>
+
+        <button type="submit" style="margin-top:15px; width:100%;">إرسال</button>
+    </form>
+
+    <div id="successMsg" class="hidden success">
+        شكرًا لك، سوف نقوم بمراجعة طلبك والاتصال بك قريبًا.
+    </div>
+
+</div>
+
+<script>
+function startForm() {
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById('driverForm').classList.remove('hidden');
+}
+
+function exitProcess() {
+    alert("شكرًا لزيارتك!");
+}
+
+function submitForm(e) {
+    e.preventDefault();
+
+    const data = {
+        fullName: fullName.value,
+        nationalId: nationalId.value,
+        phone: phone.value,
+        licenseType: licenseType.value,
+        licenseValid: licenseValid.value,
+        workedBefore: workedBefore.value,
+        region: region.value,
+        livingArea: livingArea.value,
+        notes: notes.value,
+    };
+
+    fetch('https://script.google.com/a/macros/hafil.mynaghi.com/s/AKfycbwk4j5x9Gmbysd6djeUDpZtnOJ0Et5dmuE8Oz02etBi28h5jL0vXpPx00D6lRZt3kM1/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    document.getElementById('driverForm').classList.add('hidden');
+    document.getElementById('successMsg').classList.remove('hidden');
+}
+</script>
+
+</body>
+</html>
